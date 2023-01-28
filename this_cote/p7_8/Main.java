@@ -27,7 +27,7 @@ public class Main {
         Arrays.sort(arr);
 
         int start = 0;
-        int end = (int) 1e9;
+        int end = arr[N-1];
         int result = 0;
 
         while(start <= end){
@@ -45,6 +45,5 @@ public class Main {
             }
         }
         System.out.println(result);
-
     }
 }
