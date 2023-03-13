@@ -45,7 +45,8 @@ public class Main2 {
     }
 
     static void bfs(int x,int y) {
-        //dist -1로 초기화
+        //dist배열 -1로 초기화
+        //1
         for(int i=0;i<N;i++){
             for (int j=0;j<M;j++){
                 dist[i][j] = -1;
