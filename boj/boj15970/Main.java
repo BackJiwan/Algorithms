@@ -86,9 +86,9 @@ public class Main {
                 int left = arr[i].get(cnt)-arr[i].get(cnt-1);
                 int right = arr[i].get(cnt+1)-arr[i].get(cnt);
                 if(left>right){
-                    ans += left;
-                }else{
                     ans += right;
+                }else{
+                    ans += left;
                 }
             }
         }
