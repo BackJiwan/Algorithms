@@ -8,7 +8,16 @@ public class Board {
         map = new String[size][size];
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                map[row][col] = ".";
+                if((0==col)&&(19!=row)){//만약 col이 0 이라면 숫자를 찍어서 몇번쨰 row인지 알려줄 것이다.
+                    map[row][col] = String.valueOf(row);
+                }else if((19==row)&&(0==col)){
+                    map[row][col] = " ";
+                }else if(19==row){
+                    char ch = (char)(col+64);
+                    map[row][col] = String.valueOf(ch);
+                }else{
+                    map[row][col] = ".";
+                }
             }
         }
     }
