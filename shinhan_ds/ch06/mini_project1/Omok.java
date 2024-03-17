@@ -6,28 +6,75 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Omok {
-    static Board boardMain;//board의 형태는 오목 플레이 내내 유지시키기 위해서 static 선언
+    static Board boardMain;//오목판의 상태를 프로그램 전역으로 하나만 유지하기 위해 static 선언
 
+    //check의 이차원 배열은 boardMain과 동일한 위치를 의미하며, 내부의 값은 연속으로 발견된 값을 기록한다. (1~5)
+    static int[][][] check = new int[22][22][4]; //4가지의 방향중 한방향으로 이동하며 연속을 찾기 위한 배열
+
+    //dx,dy를 조합하여 좌->우, 상->하로 포인터를 이동시키며 가능한 4가지의 direction을 사용한다.
+    static int[] dx = {1,1,0,-1};
+    static int[] dy = {0,1,1,1};
+    static boolean flag; //오목 게임이 종료되는 순간을 나타내기 위한 boolean 값, 전역 선언
 
     public static void main(String[] args) {
         Player user = new Player("사용자", "O");
         Player computer = new Player("컴퓨터", "X");
-        boardMain = new Board(20);
+        boardMain = new Board(22);
         play(boardMain, user, computer);
     }
 
     private static void play(Board board, Player user, Player computer) {
-        board.print();
-        int cnt=0;
-        while(cnt<10){
+        boardMain.print();
+        flag = true;
+        Player curPlayer = user;
+        while(flag){
             //돌놓기(플레이어)
             //오목인지 검사
-            //
-            setStone(user);
-            setStone(computer);
-            cnt++;
+            if(curPlayer==user){
+                setStone(user);
+                boardMain.print();
+                curPlayer=computer;
+                System.out.print(checkOmok());
+            }else{
+                setStone(computer);
+                boardMain.print();
+                curPlayer=user;
+                System.out.print(checkOmok());
+            }
+
         }
 
+    }
+    public static String checkOmok(){
+        for(int row=1;row<=19;row++){
+            for(int col=2;col<=20;col++){
+                if(!".".equals(boardMain.map[row][col])){ //.이 아닌 경우에만
+                    for(int d=0;d<4;d++){
+                        if(check[row][col][d]==0 && finder(row,col,d,boardMain.map[row][col])==5){
+                            if (boardMain.map[row][col].equals("O")){
+                                flag = false;
+                                return "사용자가 승리하였습니다.";
+                            }else if(boardMain.map[row][col].equals("X")){
+                                flag = false;
+                                return "컴퓨터가 승리하였습니다.";
+                            }else{
+                                return "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return "";
+    }
+    public static int finder(int row,int col,int d,String player){
+        int nextRow = row + dx[d];
+        int nextCol = col + dy[d];
+
+        if(boardMain.map[nextRow][nextCol].equals(player)){
+            return check[nextRow][nextCol][d] = finder(nextRow,nextCol,d,player) + 1;
+        }
+        return 1;
     }
     private static void setStone(Player who){
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -42,8 +89,8 @@ public class Omok {
         //System.in 으로 입력받고
         try{
             st = new StringTokenizer(br.readLine()," ");
-            col = st.nextToken().charAt(0)-65;
-            row = Integer.parseInt(st.nextToken());
+            col = st.nextToken().charAt(0)-63;
+            row = Integer.parseInt(st.nextToken())+1;
         }catch(IOException e){
             e.printStackTrace();
         }
