@@ -1,4 +1,4 @@
-package acmicpc.boj15651;
+package acmicpc.완전탐색.boj15651;
 
 //완전탐색
 import java.io.*;
